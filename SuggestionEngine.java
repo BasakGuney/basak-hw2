@@ -99,22 +99,51 @@ public class SuggestionEngine extends Java8BaseListener {
 	@Override
 	public void enterMethodDeclaration(
 		Java8Parser.MethodDeclarationContext ctx) {
-		// Access methodModifier and examine all modifiers to see if there is "public".
-		// If the method is public, then get the method name from the methodDeclarator's Identifier.
-		// Add the method name to mMethods variable.
+			if(ctx.methodModifier(0)!=null){	// some methods don't have method modifier which means they have default modifier.
+				if((ctx.methodModifier(0).getText()).equals("public")){	// First argument of method modifier can contain public key.
+					mMethods.add(ctx.methodHeader().methodDeclarator().Identifier()+"");	// Adds method name to mMethods list.
+				}	
+			}
+
+			// mMethod can have the same method name more than once due to recursive methods.
+			for(int i=0;i<mMethods.size();i++){		// This loop removes recurring method names.
+				for(int j=i+1;j<mMethods.size();j++){
+					if(mMethods.get(i).equals(mMethods.get(j)))
+						mMethods.remove(j);	//
+				}
+			}
 	}
 
 	private TreeSet<Candidate> getTopKNeighbor(String word, int K) {
 		TreeSet<Candidate> minHeap = new TreeSet<>();
-		// - Go through all methods in mMethods and compute the distance of the method name to the word.
-		// - Use
-		//   double distance = Levenshtein.distance(word, methodName);
-		// to compute the distance.
-		// - Use the minHeap to keep track of K methods with the least distance.
-		// - Make sure that there is at least K elements in the heap.
-		// - You can use
-		//	LOGGER.info("my message")
-		// to add your log lines for debugging.
+
+		List<Candidate> candidates=new ArrayList<>();
+
+		for(int i=0;i<mMethods.size();i++){		// calculates distance of methods, creates a candidate object with the specified method name and distance and adds it to candidates list.
+			double distance = Levenshtein.distance(word, mMethods.get(i));
+			candidates.add(new Candidate(mMethods.get(i), distance));
+		}
+
+		String tempName;
+		double tempDis;
+		for(int i=0;i<candidates.size();i++){	// sort the candidates list from the least distance to the most.
+			for(int j=i+1;j<candidates.size();j++){
+				if(candidates.get(i).distance>candidates.get(j).distance){
+					tempName=candidates.get(i).methodName;
+					tempDis=candidates.get(i).distance;
+					candidates.get(i).methodName=candidates.get(j).methodName;
+					candidates.get(i).distance=candidates.get(j).distance;
+					candidates.get(j).methodName=tempName;
+					candidates.get(j).distance=tempDis;
+
+				}
+			}
+		}
+
+		for(int i=0;i<K;i++){	// adds K methods with the least distance to the minHeap.
+			minHeap.add(candidates.get(i));
+		}
+
 		return minHeap;
 	}
 }

@@ -431,7 +431,7 @@ methodDeclaration
 methodModifier
 	:	annotation
 	|	'public'
-	|	'protected'
+	|	'protected'	
 	|	'private'
 	|	'abstract'
 	|	'static'
