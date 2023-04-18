@@ -107,7 +107,7 @@ public class SuggestionEngine extends Java8BaseListener {
 			}
 
 			// Methods can be overloaded or recursive,following line makes sure that mMethod list doesn't have recurring method names.
-			if	(!(mMethods.contains(methodName)))
+			if(!(mMethods.contains(methodName)))
 				mMethods.add(methodName);
 
 	}
