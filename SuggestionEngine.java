@@ -99,19 +99,16 @@ public class SuggestionEngine extends Java8BaseListener {
 	@Override
 	public void enterMethodDeclaration(
 		Java8Parser.MethodDeclarationContext ctx) {
+			String methodName="";
 			if(ctx.methodModifier(0)!=null){	// some methods don't have method modifier which means they have default modifier.
 				if((ctx.methodModifier(0).getText()).equals("public")){	// First argument of method modifier can contain public key.
-					mMethods.add(ctx.methodHeader().methodDeclarator().Identifier()+"");	// Adds method name to mMethods list.
+					methodName = ctx.methodHeader().methodDeclarator().Identifier()+"";	// Adds method name to mMethods list.
 				}	
 			}
 
-			// mMethod can have the same method name more than once due to recursive methods.
-			for(int i=0;i<mMethods.size();i++){		// This loop removes recurring method names.
-				for(int j=i+1;j<mMethods.size();j++){
-					if(mMethods.get(i).equals(mMethods.get(j)))
-						mMethods.remove(j);	//
-				}
-			}
+			// Methods can be overloaded or recursive,following line makes sure that mMethod list doesn't have recurring method names.
+			if	(!(mMethods.contains(methodName)))
+				mMethods.add(methodName);
 	}
 
 	private TreeSet<Candidate> getTopKNeighbor(String word, int K) {
