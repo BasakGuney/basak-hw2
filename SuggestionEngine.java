@@ -106,19 +106,10 @@ public class SuggestionEngine extends Java8BaseListener {
 				}	
 			}
 
-<<<<<<< HEAD
 			// Methods can be overloaded or recursive,following line makes sure that mMethod list doesn't have recurring method names.
 			if	(!(mMethods.contains(methodName)))
 				mMethods.add(methodName);
-=======
-			// mMethod can have the same method name more than once due to recursive methods or overloaded methods.
-			for(int i=0;i<mMethods.size();i++){		// This loop removes recurring method names.
-				for(int j=i+1;j<mMethods.size();j++){
-					if(mMethods.get(i).equals(mMethods.get(j)))
-						mMethods.remove(j);	//
-				}
-			}
->>>>>>> 8e877774e7bddc79439a7d8da744d9820e03ea9f
+
 	}
 
 	private TreeSet<Candidate> getTopKNeighbor(String word, int K) {
