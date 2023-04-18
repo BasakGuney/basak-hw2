@@ -99,7 +99,7 @@ public class SuggestionEngine extends Java8BaseListener {
 	@Override
 	public void enterMethodDeclaration(
 		Java8Parser.MethodDeclarationContext ctx) {
-			String methodName="";
+			String methodName=null;
 			if(ctx.methodModifier(0)!=null){	// some methods don't have method modifier which means they have default modifier.
 				if((ctx.methodModifier(0).getText()).equals("public")){	// First argument of method modifier can contain public key.
 					methodName = ctx.methodHeader().methodDeclarator().Identifier()+"";	// Adds method name to mMethods list.
@@ -107,7 +107,7 @@ public class SuggestionEngine extends Java8BaseListener {
 			}
 
 			// Methods can be overloaded or recursive,following line makes sure that mMethod list doesn't have recurring method names.
-			if(!(mMethods.contains(methodName)))
+			if(!(mMethods.contains(methodName)) && methodName!=null)
 				mMethods.add(methodName);
 
 	}
@@ -138,9 +138,12 @@ public class SuggestionEngine extends Java8BaseListener {
 			}
 		}
 
-		for(int i=0;i<K;i++){	// adds K methods with the least distance to the minHeap.
+		for(int i=0;i<candidates.size();i++){	// adds K methods with the least distance to the minHeap.
+			if(i==K)
+				break;
 			minHeap.add(candidates.get(i));
 		}
+
 
 		return minHeap;
 	}
