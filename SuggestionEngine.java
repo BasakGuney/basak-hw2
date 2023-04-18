@@ -105,7 +105,7 @@ public class SuggestionEngine extends Java8BaseListener {
 				}	
 			}
 
-			// mMethod can have the same method name more than once due to recursive methods.
+			// mMethod can have the same method name more than once due to recursive methods or overloaded methods.
 			for(int i=0;i<mMethods.size();i++){		// This loop removes recurring method names.
 				for(int j=i+1;j<mMethods.size();j++){
 					if(mMethods.get(i).equals(mMethods.get(j)))
