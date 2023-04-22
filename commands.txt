@@ -1,3 +1,0 @@
-cat input/String.java | java -Djava.util.logging.config.file=logging.properties SuggestionEngine toUpper 4
-cat input/System.java | java -Djava.util.logging.config.file=logging.properties SuggestionEngine getProper 5
-cat input/String.java | java -Djava.util.logging.config.file=logging.properties SuggestionEngine get 10
